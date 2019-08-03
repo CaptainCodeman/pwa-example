@@ -33,13 +33,13 @@ generateSW({
       cacheName: 'gstatic',
     },
   }, {
-    urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
+    urlPattern: /^https:\/\/\w+\.googleapis\.com\//,
     handler: 'CacheFirst',
     options: {
-      cacheName: 'fonts',
+      cacheName: 'googleapis',
     },
   }, {
-    urlPattern: /^https:\/\/cdnjs\.cloudflare\.com\//,
+    urlPattern: /^https:\/\/cdn\.jsdelivr\.net\//,
     handler: 'CacheFirst',
     options: {
       cacheName: 'cdnjs',
