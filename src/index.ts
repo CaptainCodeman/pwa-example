@@ -13,6 +13,7 @@ import supportsPassive from 'supports-passive'
 const passiveOrFalse = supportsPassive ? { passive: true } : false
 
 const drawer = document.querySelector('mwc-drawer');
+const drawerShowAt = 1024
 
 let drawOpen = false
 drawer.addEventListener('MDCDrawer:closed', _ => {
@@ -24,12 +25,12 @@ function setDrawOpenState() {
     if (type !== drawer.type) {
         drawer.type = type
     }
-    drawer.open = drawOpen || window.innerWidth >= 960
+    drawer.open = drawOpen || window.innerWidth >= drawerShowAt
 }
 
 const container = drawer.parentNode;
 container.addEventListener('MDCTopAppBar:nav', _ => {
-    if (window.innerWidth < 960) {
+    if (window.innerWidth < drawerShowAt) {
         drawOpen = !drawOpen
         setDrawOpenState()
     }
@@ -39,22 +40,40 @@ const bar = document.querySelector('mwc-top-app-bar');
 (<any>bar).scrollTarget = bar.nextElementSibling
 
 function setViewport() {
-    requestAnimationFrame(() => {
-        setDrawOpenState()
-        document.documentElement.style.setProperty('--viewport-height', `${window.innerHeight}px`);
-    })
+    setDrawOpenState()
+
+    document.documentElement.style.setProperty('--viewport-width', `${window.innerWidth}px`);
+    document.documentElement.style.setProperty('--viewport-height', `${window.innerHeight}px`);
 }
 
 setViewport();
 
 window.addEventListener('resize', setViewport, passiveOrFalse);
-window.addEventListener('orientationchange', () => {
-    setTimeout(() => setViewport(), 500)
-});
+
+function setOrientation() {
+    switch (window.orientation) {
+        case 90:
+            document.documentElement.setAttribute('landscape', 'left')
+            break
+        case -90:
+            document.documentElement.setAttribute('landscape', 'right')
+            break
+        default:
+            document.documentElement.removeAttribute('landscape')
+            break
+    }
+
+    setTimeout(setViewport, 500);
+}
+
+setOrientation()
+
+window.addEventListener('orientationchange', setOrientation);
 
 if (document.hidden !== undefined) {
     function visibilityChange() {
         document.title = document.hidden ? 'hidden' : 'active'
+        setViewport()
     }
 
     visibilityChange();

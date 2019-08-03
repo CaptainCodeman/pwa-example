@@ -2,48 +2,31 @@
 <html lang="en">
 
 <head>
-  <title>PWA Test</title>
-  <meta charset="utf-8">
+  <title>PWA Example</title>
 
   <base href="/">
 
-  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width minimum-scale=1 initial-scale=1 maximum-scale=5 user-scalable=yes viewport-fit=cover">
   <meta name="description" content="PWA Test Application to show LitElement, MWC Components and Workbox">
 
-  <link rel="manifest" href="/manifest.json">
-  <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.9/pwacompat.min.js" integrity="sha384-VcI6S+HIsE80FVM1jgbd6WDFhzKYA0PecD/LcIyMQpT4fMJdijBh0I7Iblaacawc" crossorigin="anonymous"></script>
-
-  <link rel="icon" href="/static/favicon.ico">
-  <link rel="icon" type="image/png" href="/static/icon-128x128.png" sizes="128x128" />
+  <meta name="apple-mobile-web-app-title" content="PWA Example">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="preconnect" href="https://www.gstatic.com">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 
-  <!-- Add to homescreen for Android -->
-  <meta name="theme-color" content="#6200ee">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="PWA Test">
+  <link rel="manifest" href="/manifest.json">
 
-  <!-- Add to homescreen for Safari on iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="PWA Test">
+  <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.9/pwacompat.min.js" integrity="sha384-VcI6S+HIsE80FVM1jgbd6WDFhzKYA0PecD/LcIyMQpT4fMJdijBh0I7Iblaacawc" crossorigin="anonymous"></script>
 
-  <!-- Splash screen for Safari on iOS -->
-  <link href="/static/splashscreens/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="/static/splashscreens/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="/static/splashscreens/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
-  <link href="/static/splashscreens/iphonex_splash.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
-  <link href="/static/splashscreens/iphonexr_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="/static/splashscreens/iphonexsmax_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
-  <link href="/static/splashscreens/ipad_splash.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="/static/splashscreens/ipadpro1_splash.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="/static/splashscreens/ipadpro3_splash.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-  <link href="/static/splashscreens/ipadpro2_splash.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
-
-  <!-- Homescreen icons -->
+  <link rel="icon" href="/static/favicon.ico">
+  <link rel="icon" type="image/png" href="/static/icon-128x128.png" sizes="128x128" />
+  
+  <!-- apple icons -->
   <link rel="apple-touch-icon" href="/static/apple-touch-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="120x120" href="/static/apple-touch-icon-120x120.png">
   <link rel="apple-touch-icon" sizes="152x152" href="/static/apple-touch-icon-152x152.png">
@@ -51,7 +34,7 @@
 
   <style>
     :root {
-      --mdc-theme-primary: #6200ee;
+      --mdc-theme-primary: #2196f3;
       --mdc-theme-on-primary: #fff;
 
       --safe-area-inset-top: 0px;
@@ -60,8 +43,11 @@
       --safe-area-inset-left: 0px;
 
       --min-padding: 10px;
+      --viewport-width: 100%;
       --viewport-height: 100%;
     }
+
+    @viewport { viewport-fit: cover; }
 
     @supports (padding-top: constant(safe-area-inset-top)) {
       :root {
@@ -81,27 +67,35 @@
       }
     }
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', 'Noto', sans-serif;
-      line-height: 1.5;
-      color: rgba(0, 0, 0, 0.54);
-      background-color: var(--mdc-theme-primary);
-      height: var(--viewport-height, 100%);
-
-      padding-top: var(--safe-area-inset-top);
-      padding-bottom: var(--safe-area-inset-bottom);
+    html {
+      background-color: #fff;
     }
 
     html,
     body {
       width: 100%;
       height: 100%;
-      overflow-x: hidden;
-      overflow-y: scroll;
 
-      -webkit-overflow-scrolling: touch;
+      width: var(--viewport-width);
+      height: var(--viewport-height);
+
+      overflow: hidden;
+
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 100%;
+      height: 100%;
+
+      font-family: 'Roboto', 'Noto', sans-serif;
+      line-height: 1.5;
+      color: rgba(0, 0, 0, 0.54);
+      background-color: var(--mdc-theme-primary);
+
+      padding-top: var(--safe-area-inset-top);
+      padding-bottom: var(--safe-area-inset-bottom);
     }
 
     .unresolved {
@@ -114,7 +108,7 @@
 
     div[slot="appContent"] {
       position: relative;
-      height: var(--viewport-height, 100%);
+      height: 100%;
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -126,12 +120,15 @@
     }
 
     #main-content {
-      box-sizing: border-box;
-      background-color: #fff;
-      overflow: auto;
       flex: 1;
+      box-sizing: border-box;
+      margin: 0;
       padding: var(--min-padding);
       padding-top: 56px;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+      background-color: #fff;
     }
 
     @media (min-width: 600px) {
@@ -149,7 +146,7 @@
 
     mwc-drawer {
       background-color: #f7f7f7;
-      height: var(--viewport-height, 100%);
+      height: 100%;
       width: 100%;
     }
 
@@ -175,6 +172,23 @@
     #iconButton {
       color: white;
     }
+
+    /*
+    rotate content to simulate fixed portrait mode on ios safari
+    html[landscape="left"] body {
+      width: var(--viewport-height);
+      height: var(--viewport-width);
+      transform-origin: 0 0;
+      transform: rotate(-90deg) translateX(-100%);
+      padding-top: var(--safe-area-inset-left);
+      padding-bottom: var(--safe-area-inset-right);
+    }
+
+    html[landscape="left"] #main-content {
+      padding-left: max(var(--min-padding), var(--safe-area-inset-top));
+      padding-right: max(var(--min-padding), var(--safe-area-inset-bottom));
+    }
+    */
   </style>
 
   <script>
