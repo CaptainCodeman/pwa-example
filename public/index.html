@@ -202,7 +202,7 @@
 
   <script type="module">
     (async () => {
-      if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
+      if ('serviceWorker' in navigator && location.hostname !== 'xlocalhost') {
         const { Workbox } = await import('https://storage.googleapis.com/workbox-cdn/releases/5.0.0-alpha.2/workbox-window.prod.mjs');
         const wb = new Workbox('/sw.js');
 
@@ -215,7 +215,9 @@
           }
         });
 
-        wb.register();
+        const reg = await wb.register()
+
+        window.addEventListener('sw-update', _ => reg.update())
       }
     })();
   </script>
@@ -227,8 +229,9 @@
     <span slot="subtitle">subtitle</span>
     <div id="drawer-content">
       <p>Drawer content</p>
+      <mwc-icon-button icon="refresh"></mwc-icon-button>
       <mwc-icon-button icon="gesture"></mwc-icon-button>
-      <mwc-icon-button icon="gavel" id="gavel"></mwc-icon-button>
+      <mwc-icon-button icon="gavel"></mwc-icon-button>
     </div>
     <div slot="appContent">
       <mwc-top-app-bar>

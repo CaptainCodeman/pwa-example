@@ -12,6 +12,12 @@ import supportsPassive from 'supports-passive'
 
 const passiveOrFalse = supportsPassive ? { passive: true } : false
 
+const isIos = () => {
+const userAgent = window.navigator.userAgent.toLowerCase();
+return /iphone|ipad|ipod/.test( userAgent );
+}
+const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
 const drawer = document.querySelector('mwc-drawer');
 const drawerShowAt = 1024
 
@@ -70,10 +76,19 @@ setOrientation()
 
 window.addEventListener('orientationchange', setOrientation);
 
+function checkForUpdate() {
+    window.dispatchEvent(new CustomEvent('sw-update'))
+}
+
 if (document.hidden !== undefined) {
     function visibilityChange() {
         document.title = document.hidden ? 'hidden' : 'active'
         setViewport()
+
+        if (!document.hidden && isIos() && !isInStandaloneMode()) {
+            // TODO: limit how often this gets called
+            checkForUpdate()
+        }
     }
 
     visibilityChange();
@@ -81,3 +96,6 @@ if (document.hidden !== undefined) {
 }
 
 window.addEventListener('load', () => document.body.classList.remove('unresolved'));
+
+const refresh = document.querySelector('mwc-icon-button[icon="refresh"]')
+refresh.addEventListener('click', checkForUpdate)
