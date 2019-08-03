@@ -1,6 +1,10 @@
+node_modules/
 npm-debug.log*
 firebase-debug.log*
 .firebase/
-node_modules/
 .npm
 .env
+
+public/static/app.min.js*
+public/sw.js
+public/workbox-*.js
