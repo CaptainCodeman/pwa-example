@@ -45,7 +45,7 @@ generateSW({
       cacheName: 'cdnjs',
     },
   }],
-  offlineGoogleAnalytics: false,
+  offlineGoogleAnalytics: true,
   cleanupOutdatedCaches: true,
   navigationPreload: false,
   sourcemap: false,

@@ -10,13 +10,20 @@ import '@material/mwc-top-app-bar'
 
 import supportsPassive from 'supports-passive'
 
-const passiveOrFalse = supportsPassive ? { passive: true } : false
-
-const isIos = () => {
-const userAgent = window.navigator.userAgent.toLowerCase();
-return /iphone|ipad|ipod/.test( userAgent );
+declare global {
+    interface Window {
+        gtag: Function
+    }
 }
-const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+window.addEventListener('error', e => {
+    window.gtag('event', 'exception', {
+        'description': e.error,
+        'fatal': false
+    })
+})
+
+const passiveOrFalse = supportsPassive ? { passive: true } : false
 
 const drawer = document.querySelector('mwc-drawer');
 const drawerShowAt = 1024
@@ -76,8 +83,31 @@ setOrientation()
 
 window.addEventListener('orientationchange', setOrientation);
 
-function checkForUpdate() {
-    window.dispatchEvent(new CustomEvent('sw-update'))
+
+const isIOS = !!window.navigator.userAgent && /iPad|iPhone|iPod/.test(window.navigator.userAgent)
+
+const getAppVersion = () => {
+    const url = `/version.txt?c=${Date.now()}`
+    const headers = {
+        'Cache-Control': 'no-cache, no-store, must-revalidate'
+    }
+
+    return fetch(url, { headers }).then(response => response.text())
+}
+
+async function checkForUpdate() {
+    if (isIOS && window.navigator.standalone === true) {
+        const current = window.localStorage.getItem('version')
+
+        const version = await getAppVersion()
+        if (version !== current) {
+            window.localStorage.setItem('version', version)
+
+            window.location.reload()
+        }
+    } else {
+        window.dispatchEvent(new CustomEvent('sw-update'))
+    }
 }
 
 if (document.hidden !== undefined) {
@@ -85,7 +115,7 @@ if (document.hidden !== undefined) {
         document.title = document.hidden ? 'hidden' : 'active'
         setViewport()
 
-        if (!document.hidden && isIos() && !isInStandaloneMode()) {
+        if (!document.hidden) { // && window.navigator.standalone === true) {
             // TODO: limit how often this gets called
             checkForUpdate()
         }
@@ -99,3 +129,4 @@ window.addEventListener('load', () => document.body.classList.remove('unresolved
 
 const refresh = document.querySelector('mwc-icon-button[icon="refresh"]')
 refresh.addEventListener('click', checkForUpdate)
+

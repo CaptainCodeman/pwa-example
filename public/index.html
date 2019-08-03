@@ -206,14 +206,22 @@
         const { Workbox } = await import('https://storage.googleapis.com/workbox-cdn/releases/5.0.0-alpha.2/workbox-window.prod.mjs');
         const wb = new Workbox('/sw.js');
 
-        wb.addEventListener('installed', event => {
-          if (event.isUpdate) {
-            const snack = document.querySelector('#snack');
-            const restart = snack.querySelector('#actionButton')
-            restart.addEventListener('click', _ => window.location.reload())
-            snack.open()
+        function notifyUpdate() {
+          const snack = document.querySelector('#snack');
+          const restart = snack.querySelector('#actionButton')
+          restart.addEventListener('click', _ => window.location.reload())
+          snack.open()
+        }
+
+        wb.addEventListener('installed', evt => {
+          if (evt.isUpdate) {
+            notifyUpdate()
           }
         });
+
+        wb.addEventListener('externalinstalled', evt => {
+          notifyUpdate()
+        })
 
         const reg = await wb.register()
 
@@ -221,6 +229,16 @@
       }
     })();
   </script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-226828-17"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-226828-17');
+  </script>
+
 </head>
 
 <body class="unresolved">
@@ -242,7 +260,12 @@
         <mwc-icon-button icon="favorite" slot="actionItems"></mwc-icon-button>
       </mwc-top-app-bar>
       <div id="main-content">
-        <h1>Title</h1>
+        <h1>Welcome</h1>
+        <p><small>Last Updated 2019-08-03 3:40pm</small></p>
+        <p>
+          This is an experiment to test PWA handling using Material Web Components, workbox,
+          and handling of Safari screen layout, page lifecycle events and general crappiness.
+        </p>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
           incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
