@@ -1,0 +1,29 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [{
+      "source": "sw.js",
+      "headers": [{
+        "key": "Cache-Control",
+        "value": "max-age=0, must-revalidate"
+      }]
+    }, {
+      "source": "**/*.@(jpg|jpeg|gif|png|svg)",
+      "headers": [{
+        "key": "Cache-Control",
+        "value": "max-age=86400"
+      }]
+    }, {
+      "source": "**/*.@(html|js|css|json|txt)",
+      "headers": [{
+        "key": "Cache-Control",
+        "value": "max-age=0, must-revalidate"
+      }]
+    }]
+  }
+}

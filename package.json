@@ -1,0 +1,42 @@
+{
+  "name": "pwa-test",
+  "version": "1.0.0",
+  "description": "PWA Test App",
+  "main": "index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "node server.js",
+    "sw": "node workbox.js",
+    "map": "source-map-explorer public/static/app.min.js",
+    "deploy:pre": "npm run build && npm run sw",
+    "deploy": "npm run deploy:pre && firebase deploy --only hosting"
+  },
+  "author": "Simon Green <simon@captaincodeman.com> (https://github.com/captaincodeman)",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.26.3",
+    "compression": "^1.7.4",
+    "connect-history-api-fallback": "^1.6.0",
+    "connect-logger": "0.0.1",
+    "rollup": "^1.17.0",
+    "rollup-plugin-commonjs": "^10.0.1",
+    "rollup-plugin-minify-html-literals": "^1.2.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.1",
+    "rollup-plugin-typescript": "^1.0.1",
+    "source-map-explorer": "^2.0.1",
+    "typescript": "^3.5.3",
+    "workbox-build": "^5.0.0-alpha.2"
+  },
+  "dependencies": {
+    "@material/mwc-button": "^0.6.0",
+    "@material/mwc-drawer": "^0.6.0",
+    "@material/mwc-icon-button": "^0.6.0",
+    "@material/mwc-snackbar": "^0.6.0",
+    "@material/mwc-top-app-bar": "^0.6.0",
+    "@webcomponents/webcomponentsjs": "^2.2.10",
+    "supports-passive": "0.0.1",
+    "workbox-window": "^5.0.0-alpha.2"
+  }
+}
