@@ -20,6 +20,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://storage.googleapis.com">
+  <link rel="dns-prefetch" href="https://www.google-analytics.com">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
 
   <link rel="manifest" href="/manifest.json">
 
@@ -45,8 +47,6 @@
       --safe-area-inset-left: 0px;
 
       --min-padding: 10px;
-      --viewport-width: 100%;
-      --viewport-height: 100%;
     }
 
     @viewport { viewport-fit: cover; }
@@ -75,11 +75,10 @@
 
     html,
     body {
+      position: fixed;
+
       width: 100%;
       height: 100%;
-
-      width: var(--viewport-width);
-      height: var(--viewport-height);
 
       overflow: hidden;
 
@@ -88,9 +87,6 @@
     }
 
     body {
-      width: 100%;
-      height: 100%;
-
       font-family: 'Roboto', 'Noto', sans-serif;
       line-height: 1.5;
       color: rgba(0, 0, 0, 0.54);
@@ -109,7 +105,6 @@
     }
 
     div[slot="appContent"] {
-      position: relative;
       height: 100%;
       width: 100%;
       display: flex;
@@ -124,9 +119,9 @@
     #main-content {
       flex: 1;
       box-sizing: border-box;
-      margin: 0;
       padding: var(--min-padding);
       padding-top: 56px;
+  
       overflow-x: hidden;
       overflow-y: scroll;
       -webkit-overflow-scrolling: touch;
@@ -174,35 +169,24 @@
     #iconButton {
       color: white;
     }
-
-    /*
-    rotate content to simulate fixed portrait mode on ios safari
-    html[landscape="left"] body {
-      width: var(--viewport-height);
-      height: var(--viewport-width);
-      transform-origin: 0 0;
-      transform: rotate(-90deg) translateX(-100%);
-      padding-top: var(--safe-area-inset-left);
-      padding-bottom: var(--safe-area-inset-right);
-    }
-
-    html[landscape="left"] #main-content {
-      padding-left: max(var(--min-padding), var(--safe-area-inset-top));
-      padding-right: max(var(--min-padding), var(--safe-area-inset-bottom));
-    }
-    */
   </style>
 
   <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-226828-17');
+
     window.WebComponents = window.WebComponents || {};
     window.WebComponents.root = 'https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.2.10/';
   </script>
 
-  <script src="/static/app.min.js" async></script>
+  <script async src="/static/app.min.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-226828-17"></script>
 
   <script type="module">
     (async () => {
-      if ('serviceWorker' in navigator && location.hostname !== 'xlocalhost') {
+      if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
         const { Workbox } = await import('https://storage.googleapis.com/workbox-cdn/releases/5.0.0-alpha.2/workbox-window.prod.mjs');
         const wb = new Workbox('/sw.js');
 
@@ -229,16 +213,6 @@
       }
     })();
   </script>
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-226828-17"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-226828-17');
-  </script>
-
 </head>
 
 <body class="unresolved">
@@ -261,7 +235,7 @@
       </mwc-top-app-bar>
       <div id="main-content">
         <h1>Welcome</h1>
-        <p><small>Last Updated 2019-08-03 3:40pm</small></p>
+        <p><small>Last Updated 2019-08-04 1:30pm</small></p>
         <p>
           This is an experiment to test PWA handling using Material Web Components, workbox,
           and handling of Safari screen layout, page lifecycle events and general crappiness.
