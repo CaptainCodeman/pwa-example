@@ -57,6 +57,9 @@
       }, {
         "key": "X-Content-Type-Options",
         "value": "nosniff"
+      }, {
+        "key": "Link",
+        "value": "</static/app.min.js>; rel=preload; as=script"
       }]
     }]
   }
