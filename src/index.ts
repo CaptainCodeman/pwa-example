@@ -57,22 +57,41 @@ const bar = document.querySelector('mwc-top-app-bar');
 
 const isIOS = !!window.navigator.userAgent && /iPad|iPhone|iPod/.test(window.navigator.userAgent)
 
-const getAppVersion = () => {
-    const url = `/version.txt?c=${Date.now()}`
-    const headers = {
-        'Cache-Control': 'no-cache, no-store, must-revalidate'
-    }
+function hexString(buffer: ArrayBuffer) {
+    const byteArray = new Uint8Array(buffer);
 
-    return fetch(url, { headers }).then(response => response.text())
+    const hexCodes = [...byteArray].map(value => {
+        const hexCode = value.toString(16);
+        const paddedHexCode = hexCode.padStart(2, '0');
+        return paddedHexCode;
+    });
+
+    return hexCodes.join('');
+}
+
+async function generateHash(text: string) {
+    const encoder = new TextEncoder()
+    const buff = encoder.encode(text)
+    const digest = await window.crypto.subtle.digest('SHA-1', buff)
+    return hexString(digest)
+}
+
+async function getAppVersion() {
+    // cachebust service worker
+    const url = `/sw.js?c=${Date.now()}`
+    const headers = { 'Cache-Control': 'no-cache, no-store, must-revalidate' }
+    const resp = await fetch(url, { headers })
+    const text = await resp.text()
+    const hash = await generateHash(text)
+    return hash
 }
 
 async function checkForUpdate() {
     if (isIOS && window.navigator.standalone === true) {
         const current = window.localStorage.getItem('version')
-
-        const version = await getAppVersion()
-        if (version !== current) {
-            window.localStorage.setItem('version', version)
+        const latest = await getAppVersion()
+        if (latest !== current) {
+            window.localStorage.setItem('version', latest)
             window.location.reload()
         }
     } else {
