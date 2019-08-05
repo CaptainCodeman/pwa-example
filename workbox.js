@@ -10,7 +10,7 @@ generateSW({
   globDirectory: 'public',
   globPatterns: [
     'index.html',
-    'manifest.json',
+    'index.webmanifest',
     'static/**/*.js',
   ],
   cacheId: 'mwc-test',

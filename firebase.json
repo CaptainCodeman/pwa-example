@@ -14,19 +14,49 @@
       "source": "sw.js",
       "headers": [{
         "key": "Cache-Control",
-        "value": "max-age=0, must-revalidate"
+        "value": "max-age=0"
+      }, {
+        "key": "X-Content-Type-Options",
+        "value": "nosniff"
       }]
     }, {
-      "source": "**/*.@(jpg|jpeg|gif|png|svg)",
+      "source": "index.webmanifest",
+      "headers": [{
+        "key": "Cache-Control",
+        "value": "max-age=0"
+      }, {
+        "key": "Content-Type",
+        "value": "application/manifest+json; charset=utf-8"
+      }, {
+        "key": "X-Content-Type-Options",
+        "value": "nosniff"
+      }]
+    }, {
+      "source": "**/*.@(jpg|jpeg|gif|png|svg|ico)",
       "headers": [{
         "key": "Cache-Control",
         "value": "max-age=86400, immutable"
+      }, {
+        "key": "X-Content-Type-Options",
+        "value": "nosniff"
       }]
     }, {
       "source": "**/*.@(html|js|css|json|txt)",
       "headers": [{
         "key": "Cache-Control",
-        "value": "max-age=0, must-revalidate"
+        "value": "max-age=0"
+      }, {
+        "key": "X-Content-Type-Options",
+        "value": "nosniff"
+      }]
+    }, {
+      "source": "**",
+      "headers": [{
+        "key": "Cache-Control",
+        "value": "max-age=0"
+      }, {
+        "key": "X-Content-Type-Options",
+        "value": "nosniff"
       }]
     }]
   }
