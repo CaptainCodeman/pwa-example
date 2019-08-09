@@ -13,7 +13,7 @@ generateSW({
     'index.webmanifest',
     'static/**/*.js',
   ],
-  cacheId: 'mwc-test',
+  cacheId: 'pwa-example',
   skipWaiting: true,
   clientsClaim: true,
   navigateFallback: '/index.html',

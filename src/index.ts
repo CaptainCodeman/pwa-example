@@ -1,16 +1,20 @@
 import '@webcomponents/webcomponentsjs/webcomponents-loader'
 
-import '@material/mwc-button'
-import '@material/mwc-drawer'
-import '@material/mwc-icon-button'
-import '@material/mwc-snackbar'
-import '@material/mwc-top-app-bar'
+import 'mega-material/button'
+import 'mega-material/drawer'
+import 'mega-material/icon-button'
+import 'mega-material/snackbar'
+import 'mega-material/top-app-bar'
+
+import { DrawerElement } from 'mega-material/drawer'
 
 import supportsPassive from 'supports-passive'
 
 declare global {
     interface Window {
         gtag: Function
+        requestIdleCallback: Function
+        cancelIdleCallback: Function
     }
 }
 
@@ -23,7 +27,7 @@ window.addEventListener('error', e => {
 
 const passiveOrFalse = supportsPassive ? { passive: true } : false
 
-const drawer = document.querySelector('mwc-drawer');
+const drawer = document.querySelector('mega-drawer');
 const drawerShowAt = 1024
 
 let drawOpen = false
@@ -33,10 +37,17 @@ drawer.addEventListener('MDCDrawer:closed', _ => {
 
 function setDrawOpenState() {
     const type = window.innerWidth <= 768 ? 'modal' : 'dismissible'
-    if (type !== drawer.type) {
-        drawer.type = type
+    switch (type) {
+        case 'modal':
+            drawer.modal = true
+            drawer.dismissible = false
+            break
+        case 'dismissible':
+            drawer.modal = false
+            drawer.dismissible = true
+            break
     }
-    drawer.open = drawOpen || window.innerWidth >= drawerShowAt
+    drawer.opened = drawOpen || window.innerWidth >= drawerShowAt
 }
 setDrawOpenState()
 
@@ -49,11 +60,11 @@ function toggleDrawer() {
         setDrawOpenState()
     }
 }
-const container = drawer.parentNode;
-container.addEventListener('MDCTopAppBar:nav', toggleDrawer)
+// const container = drawer.parentNode;
+// container.addEventListener('top-app-bar:nav', toggleDrawer)
 
-const bar = document.querySelector('mwc-top-app-bar');
-(<any>bar).scrollTarget = bar.nextElementSibling
+const bar = document.querySelector('mega-top-app-bar');
+(<any>bar).scrollTarget = bar.parentElement;
 
 const isIOS = !!window.navigator.userAgent && /iPad|iPhone|iPod/.test(window.navigator.userAgent)
 
@@ -115,8 +126,32 @@ if (document.hidden !== undefined) {
 
 window.addEventListener('load', () => document.body.classList.remove('unresolved'));
 
-const refresh = document.querySelector('mwc-icon-button[icon="refresh"]')
+document.addEventListener('touchmove', function () {
+    document.body.scrollTop = 0
+})
+
+const refresh = document.querySelector('mega-icon-button[icon="refresh"]')
 refresh.addEventListener('click', _ => {
     checkForUpdate()
     toggleDrawer()
 })
+
+window.requestIdleCallback =
+    window.requestIdleCallback ||
+    function (cb) {
+        var start = Date.now();
+        return setTimeout(function () {
+            cb({
+                didTimeout: false,
+                timeRemaining: function () {
+                    return Math.max(0, 50 - (Date.now() - start));
+                }
+            });
+        }, 1);
+    }
+
+window.cancelIdleCallback =
+    window.cancelIdleCallback ||
+    function (id) {
+        clearTimeout(id);
+    }
