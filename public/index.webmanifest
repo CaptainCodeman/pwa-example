@@ -2,7 +2,7 @@
   "name": "PWA Example",
   "short_name": "PWA",
   "theme_color": "#9123A4",
-  "background_color": "#ffffff",
+  "background_color": "#9123A4",
   "display": "standalone",
   "orientation": "portrait",
   "start_url": "/?utm_source=homescreen",
