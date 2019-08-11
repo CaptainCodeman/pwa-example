@@ -50,16 +50,13 @@
         "value": "nosniff"
       }]
     }, {
-      "source": "**",
+      "source": "/",
       "headers": [{
         "key": "Cache-Control",
         "value": "max-age=0"
       }, {
         "key": "X-Content-Type-Options",
         "value": "nosniff"
-      }, {
-        "key": "Link",
-        "value": "</static/app.min.js>; rel=preload; as=script"
       }]
     }]
   }

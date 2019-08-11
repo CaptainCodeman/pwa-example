@@ -11,12 +11,17 @@ import { terser } from 'rollup-plugin-terser';
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-  input: 'src/index.ts',
+  input: [
+    'src/app.ts',
+    'src/lazy.ts',
+  ],
   output: {
-    file: 'public/static/app.min.js',
-    format: 'iife',
+    dir: 'public/static',
+    format: 'esm',
     name: 'App',
     sourcemap: true,
+    entryFileNames: '[name].min.js',
+    chunkFileNames: 'common.min.js',
   },
   plugins: [
     resolve(),

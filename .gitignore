@@ -5,6 +5,4 @@ firebase-debug.log*
 .npm
 .env
 
-public/static/app.min.js*
-public/sw.js
-public/workbox-*.js
+public/**/*.js*

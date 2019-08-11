@@ -14,6 +14,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
+  <link rel="modulepreload" href="/static/app.min.js" as="script">
+  <link rel="modulepreload" href="/static/common.min.js" as="script">
+  <link rel="modulepreload" href="/static/lazy.min.js" as="script">
+
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="preconnect" href="https://www.gstatic.com">
   <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -62,20 +66,19 @@
       }
     }
 
-    html {
+    html, body {
       margin: 0;
       padding: 0;
       width: 100%;
       height: 100%;
+    }
+
+    html {
       height: calc(100% + var(--safe-area-inset-top));
-      background-color: var(--mega-theme-primary);
+      background-color: #fff;
     }
 
     body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
       position: fixed;
       overflow: hidden;
       box-sizing: border-box;
@@ -83,8 +86,9 @@
       line-height: 1.5;
       color: rgba(0, 0, 0, 0.54);
       background-color: var(--mega-theme-primary);
-      transition: opacity ease-in 0.1s;
+      transition: opacity ease-in 60ms;
       padding-top: var(--safe-area-inset-top);
+      overscroll-behavior-y: none;
       -webkit-text-size-adjust: none;
     }
 
@@ -97,7 +101,6 @@
     }
 
     div[slot="app-content"] {
-      flex: 0;
       width: 100%;
       height: 100%;
       display: flex;
@@ -107,8 +110,6 @@
     }
 
     #main-content {
-      width: 100%;
-      height: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
       box-sizing: border-box;
@@ -125,8 +126,6 @@
 
     mega-drawer {
       background-color: #f7f7f7;
-      height: 100%;
-      width: 100%;
     }
 
     mega-top-app-bar {
@@ -164,6 +163,7 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'UA-226828-17');
+
     window.addEventListener('load', _ => 
       window.requestIdleCallback(() => {
         const s = document.createElement('script')
@@ -176,9 +176,7 @@
     window.WebComponents.root = 'https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.2.10/';
   </script>
 
-  <script async src="/static/app.min.js"></script>
-  <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.9/pwacompat.min.js" integrity="sha384-VcI6S+HIsE80FVM1jgbd6WDFhzKYA0PecD/LcIyMQpT4fMJdijBh0I7Iblaacawc" crossorigin="anonymous"></script>
-
+  <script type="module" src="/static/app.min.js"></script>
   <script type="module">
     (async () => {
       if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
