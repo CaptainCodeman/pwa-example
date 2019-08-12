@@ -30,11 +30,6 @@
     "workbox-build": "^5.0.0-alpha.2"
   },
   "dependencies": {
-    "@material/mwc-button": "^0.6.0",
-    "@material/mwc-drawer": "^0.6.0",
-    "@material/mwc-icon-button": "^0.6.0",
-    "@material/mwc-snackbar": "^0.6.0",
-    "@material/mwc-top-app-bar": "^0.6.0",
     "@webcomponents/webcomponentsjs": "^2.2.10",
     "supports-passive": "0.0.1",
     "workbox-window": "^5.0.0-alpha.2"
