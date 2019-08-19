@@ -24,7 +24,9 @@ export default {
     chunkFileNames: 'common.min.js',
   },
   plugins: [
-    resolve(),
+    resolve({
+      dedupe: [ 'lit-html', 'lit-element' ],
+    }),
     commonjs(),
     production && minifyHTML(),
     typescript({ typescript: require('typescript') }),
