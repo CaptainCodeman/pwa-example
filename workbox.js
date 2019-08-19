@@ -14,7 +14,7 @@ generateSW({
     'static/**/*.js',
   ],
   cacheId: 'pwa-example',
-  skipWaiting: true,
+  skipWaiting: false,
   clientsClaim: true,
   navigateFallback: '/index.html',
   navigateFallbackBlacklist: [
@@ -48,7 +48,7 @@ generateSW({
   offlineGoogleAnalytics: true,
   cleanupOutdatedCaches: true,
   navigationPreload: false,
-  sourcemap: false,
+  sourcemap: true,
 })
 .then(({ count, size }) => {
   console.log(`Generated ${swDest}, which will precache ${count} files, totaling ${size} bytes.`);

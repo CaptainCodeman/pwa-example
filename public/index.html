@@ -178,33 +178,31 @@
 
   <script type="module" src="/static/app.min.js"></script>
   <script type="module">
-    (async () => {
-      if ('serviceWorker' in navigator && location.hostname !== 'localhost') {
-        const { Workbox } = await import('https://storage.googleapis.com/workbox-cdn/releases/5.0.0-alpha.2/workbox-window.prod.mjs');
-        const wb = new Workbox('/sw.js');
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async () => {
+        const { Workbox } = await import('https://storage.googleapis.com/workbox-cdn/releases/5.0.0-alpha.2/workbox-window.prod.mjs')
+        const wb = new Workbox('/sw.js')
 
-        function notifyUpdate() {
-          const snack = document.querySelector('#snack');
+        function activateUpdate() {
+          wb.addEventListener('controlling', _ => window.location.reload())
+          wb.messageSW({type: 'SKIP_WAITING'})
+        }
+
+        function promptToUpdate() {
+          const snack = document.querySelector('#snack')
           const reload = snack.querySelector('#reload')
-          reload.addEventListener('click', _ => window.location.reload())
+
+          reload.addEventListener('click', activateUpdate)
           snack.open()
         }
 
-        wb.addEventListener('installed', evt => {
-          if (evt.isUpdate) {
-            notifyUpdate()
-          }
-        });
-
-        wb.addEventListener('externalinstalled', evt => {
-          notifyUpdate()
-        })
+        wb.addEventListener('waiting', promptToUpdate)
 
         const reg = await wb.register()
 
-        window.addEventListener('sw-update', _ => reg.update())
-      }
-    })();
+        window.addEventListener('sw-update', reg.update)
+      })
+    }
   </script>
 </head>
 
