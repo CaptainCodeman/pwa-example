@@ -80,7 +80,7 @@ export class AppShellElement extends LitElement {
   static get styles() {
     return css`
       #drawer-content {
-        padding: 0px 8px;
+        padding: 0px 16px;
       }
 
       div[slot="app-content"] {

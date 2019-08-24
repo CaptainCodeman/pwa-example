@@ -33,7 +33,7 @@ generateSW({
       cacheName: 'gstatic',
     },
   }, {
-    urlPattern: /^https:\/\/\w+\.googleapis\.com\//,
+    urlPattern: /^https:\/\/(fonts|storage)\.googleapis\.com\//,
     handler: 'CacheFirst',
     options: {
       cacheName: 'googleapis',
