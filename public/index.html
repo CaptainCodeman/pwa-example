@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <link rel="modulepreload" href="/static/app.min.js" as="script">
+  <link rel="modulepreload" href="/static/app-shell.min.js" as="script">
   <link rel="modulepreload" href="/static/common.min.js" as="script">
   <link rel="modulepreload" href="/static/lazy.min.js" as="script">
 
@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://storage.googleapis.com">
-  
+
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <link rel="dns-prefetch" href="https://www.googletagmanager.com">
 
@@ -46,7 +46,9 @@
       --min-padding: 10px;
     }
 
-    @viewport { viewport-fit: cover; }
+    @viewport {
+      viewport-fit: cover;
+    }
 
     @supports (padding-top: constant(safe-area-inset-top)) {
       :root {
@@ -66,7 +68,8 @@
       }
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       padding: 0;
       width: 100%;
@@ -96,43 +99,6 @@
       opacity: 0;
     }
 
-    #drawer-content {
-      padding: 0px 16px 0 16px;
-    }
-
-    div[slot="app-content"] {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      background-color: #fff;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    #main-content {
-      overflow-x: hidden;
-      overflow-y: scroll;
-      box-sizing: border-box;
-      padding: var(--min-padding);
-      -webkit-overflow-scrolling: touch;
-    }
-
-    @supports(padding: max(0px)) {
-      #main-content {
-        padding-left: max(var(--min-padding), var(--safe-area-inset-left));
-        padding-right: max(var(--min-padding), var(--safe-area-inset-right));
-      }
-    }
-
-    mega-drawer {
-      background-color: #f7f7f7;
-    }
-
-    mega-top-app-bar {
-      display: block;
-      flex: 0;
-    }
-
     h1 {
       margin: 12px 0;
       font-size: 20px;
@@ -140,12 +106,6 @@
 
     p {
       font-size: 16px;
-    }
-
-    @media (min-width: 1024px) {
-      mega-icon-button[icon="menu"] {
-        display: none;
-      }
     }
 
     #actionButton {
@@ -159,33 +119,59 @@
   </style>
 
   <script>
+    document.addEventListener('touchmove', function () {
+      document.body.scrollTop = 0
+    })
+
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'UA-226828-17');
 
-    window.addEventListener('load', _ => 
-      window.requestIdleCallback(() => {
-        const s = document.createElement('script')
-        s.src = `https://www.googletagmanager.com/gtag/js?id=UA-226828-17`
-        document.head.appendChild(s)
-      })
-    )
+    window.addEventListener('error', e => gtag('event', 'exception', {
+      'description': e.error,
+      'fatal': false
+    }))
+
+    window.addEventListener('load', _ => {
+      const s = document.createElement('script')
+      s.src = `https://www.googletagmanager.com/gtag/js?id=UA-226828-17`
+      document.head.appendChild(s)
+    })
 
     window.WebComponents = window.WebComponents || {};
     window.WebComponents.root = 'https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.2.10/';
   </script>
 
-  <script type="module" src="/static/app.min.js"></script>
+  <!--
+  <script src="https://www.gstatic.com/firebasejs/6.4.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.4.2/firebase-firestore.js"></script>
+  <script>
+    firebase.initializeApp({
+      apiKey: "AIzaSyCA0ykvuWkTafFUWRIFYtpsLsyHBOFCD4Q",
+      authDomain: "photo-serve-data.firebaseapp.com",
+      databaseURL: "https://photo-serve-data.firebaseio.com",
+      projectId: "photo-serve-data",
+      storageBucket: "photo-serve-data.appspot.com",
+      messagingSenderId: "1062178006232",
+      appId: "1:1062178006232:web:149c156f86a06a6b"
+    });
+
+    // uncommenting this line creates a 60 sec delay to update service workers
+    // firebase.firestore().doc(`/site/showchampions`).get().then(doc => console.log(doc.data()))
+  </script>
+  -->
+
+  <script type="module" src="/static/app-shell.min.js"></script>
   <script type="module">
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', async () => {
-        const { Workbox } = await import('https://storage.googleapis.com/workbox-cdn/releases/5.0.0-alpha.2/workbox-window.prod.mjs')
+        const { Workbox } = await import('https://storage.googleapis.com/workbox-cdn/releases/5.0.0-alpha.2/workbox-window.dev.mjs')
         const wb = new Workbox('/sw.js')
 
         function activateUpdate() {
           wb.addEventListener('controlling', _ => window.location.reload())
-          wb.messageSW({type: 'SKIP_WAITING'})
+          wb.messageSW({ type: 'SKIP_WAITING' })
         }
 
         function promptToUpdate() {
@@ -200,128 +186,109 @@
 
         const reg = await wb.register()
 
-        window.addEventListener('sw-update', reg.update)
+        window.addEventListener('sw-update', _ => reg.update())
       })
     }
   </script>
 </head>
 
 <body class="unresolved">
-  <mega-drawer hasheader dismissible>
-    <span slot="title">Drawer Title</span>
-    <span slot="subtitle">subtitle</span>
-    <div id="drawer-content">
-      <p>Drawer content</p>
-      <mega-icon-button icon="refresh"></mega-icon-button>
-      <mega-icon-button icon="gesture"></mega-icon-button>
-      <mega-icon-button icon="gavel"></mega-icon-button>
-    </div>
-    <div slot="app-content">
-      <mega-top-app-bar>
-        <mega-icon-button icon="menu" slot="navigationIcon"></mega-icon-button>
-        <div slot="title" id="title">PWA Example</div>
-        <mega-icon-button icon="file_download" slot="actionItems"></mega-icon-button>
-        <mega-icon-button icon="print" slot="actionItems"></mega-icon-button>
-        <mega-icon-button icon="favorite" slot="actionItems"></mega-icon-button>
-      </mega-top-app-bar>
-      <div id="main-content">
-        <h1>Welcome</h1>
-        <p><small>Last Updated 2019-08-04 1:30pm</small></p>
-        <p>
-          This is an experiment to test PWA handling using Material Web Components, workbox,
-          and handling of Safari screen layout, page lifecycle events and general crappiness.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-          deserunt mollit anim id est laborum.
-        </p>
-      </div>
-    </div>
-  </mega-drawer>
+  <app-shell>
+    <h1>Welcome</h1>
+    <p><small>Last Updated 2019-08-24</small></p>
+    <p>
+      This is an experiment to test PWA handling using Mega-Material Web Components, 
+      workbox 5.alpha and screen layout and orientation change handling on Safari iOS.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+      pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+      deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+      pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+      deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+      pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+      deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+      pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+      deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+      pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+      deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+      pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+      deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+      pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+      deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+      pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+      deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+      pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+      deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+      pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+      deserunt mollit anim id est laborum.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+      irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+      pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+      deserunt mollit anim id est laborum.
+    </p>
+  </app-shell>
 
   <mega-snackbar id="snack" leading dismissable>
     <span>New app version available! Click OK to refresh</span>

@@ -1,14 +1,14 @@
 {
-  "name": "pwa-test",
+  "name": "pwa-example",
   "version": "1.0.0",
-  "description": "PWA Test App",
+  "description": "PWA Example App",
   "main": "index.js",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "node server.js",
     "sw": "node workbox.js",
-    "map": "source-map-explorer public/static/app.min.js",
+    "map": "source-map-explorer public/static/app-shell.min.js",
     "deploy:pre": "npm run build && npm run sw",
     "deploy": "npm run deploy:pre && firebase deploy --only hosting"
   },
@@ -19,7 +19,7 @@
     "compression": "^1.7.4",
     "connect-history-api-fallback": "^1.6.0",
     "connect-logger": "0.0.1",
-    "rollup": "^1.17.0",
+    "rollup": "^1.20.0",
     "rollup-plugin-commonjs": "^10.0.2",
     "rollup-plugin-minify-html-literals": "^1.2.2",
     "rollup-plugin-node-resolve": "^5.2.0",
@@ -27,11 +27,14 @@
     "rollup-plugin-typescript": "^1.0.1",
     "source-map-explorer": "^2.0.1",
     "typescript": "^3.5.3",
-    "workbox-build": "^5.0.0-alpha.2"
+    "workbox-build": "^5.0.0-beta.0"
   },
   "dependencies": {
     "@webcomponents/webcomponentsjs": "^2.2.10",
+    "firebase": "^6.4.2",
+    "lit-element": "^2.2.1",
+    "lit-html": "^1.1.2",
     "supports-passive": "0.0.1",
-    "workbox-window": "^5.0.0-alpha.2"
+    "workbox-window": "^5.0.0-beta.0"
   }
 }

@@ -12,7 +12,7 @@ const production = !process.env.ROLLUP_WATCH;
 
 export default {
   input: [
-    'src/app.ts',
+    'src/app-shell.ts',
     'src/lazy.ts',
   ],
   output: {
@@ -25,7 +25,7 @@ export default {
   },
   plugins: [
     resolve({
-      dedupe: [ 'lit-html', 'lit-element' ],
+      dedupe: ['lit-html', 'lit-element'],
     }),
     commonjs(),
     production && minifyHTML(),
