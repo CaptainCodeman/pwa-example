@@ -20,6 +20,7 @@
     "connect-history-api-fallback": "^1.6.0",
     "connect-logger": "0.0.1",
     "rollup": "^1.20.0",
+    "rollup-plugin-alias": "^2.0.0",
     "rollup-plugin-commonjs": "^10.0.2",
     "rollup-plugin-minify-html-literals": "^1.2.2",
     "rollup-plugin-node-resolve": "^5.2.0",

@@ -1,4 +1,3 @@
-import '@webcomponents/webcomponentsjs/webcomponents-loader'
 import { customElement, LitElement, html, css, property, PropertyValues, query } from 'lit-element'
 import supportsPassive from 'supports-passive'
 

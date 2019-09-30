@@ -1,5 +1,6 @@
 'use strict';
 
+import alias from 'rollup-plugin-alias';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import minifyHTML from 'rollup-plugin-minify-html-literals';
@@ -24,6 +25,11 @@ export default {
     chunkFileNames: 'common.min.js',
   },
   plugins: [
+    alias({
+      entries: [
+        { find: 'lit-html/lib/shady-render.js', replacement: 'node_modules/lit-html/lit-html.js' },
+      ]
+    }),
     resolve({
       dedupe: ['lit-html', 'lit-element'],
     }),
